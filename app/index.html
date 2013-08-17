@@ -16,24 +16,47 @@
     </head>
     <body>
 
-        <iframe src="pdfs/document1.pdf" width="90%" height="5000px"></iframe>
-        <iframe src="pdfs/document2.pdf" width="90%" height="5000px"></iframe>
-        <iframe src="pdfs/document3.pdf" width="90%" height="5000px"></iframe>
-        <iframe src="pdfs/document4.pdf" width="90%" height="5000px"></iframe>
-        <iframe src="pdfs/document5.pdf" width="90%" height="5000px"></iframe>
+        <div class="navbar">
+          <div class="navbar-inner">
+            <a href="javascript://" class="openDropbox btn">Select files from Dropbox</a>
+            <a href="javascript://" data-toggle="tooltip" title="" class="muted status pull-right"></a>
+          </div>
+        </div>
+
+        <div class="pdfs">
+
+            <div class="container">
+
+                <div class="hero-unit">
+
+                    <h1>Document overlayer</h1>
+
+                    <p>This app is meant to overlay multiple documents in order to get an overview of the differences between these documents. To get started, select multiple files from your dropbox account. You can select multiple files by holding shift.</p>
+                
+                    <a href="javascript://" class="openDropbox btn btn-primary btn-large">Select files from Dropbox</a>
+
+                </div>
+
+                <p>Thrown together by <a href="http://joshuadelange.com">Joshua de Lange</a>. You're more than welcome to contribute over at <a href="https://github.com/joshuadelange/document-overlayer">Github</a>.</p>
+
+            </div>
+
+        </div>
 
         <!--[if lt IE 7]>
             <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
         <![endif]-->
 
         <!-- Add your site or application content here -->
-
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="scripts/vendor/jquery.min.js"><\/script>')</script>
 
-        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+        <script src="https://www.dropbox.com/static/api/1/dropins.js" id="dropboxjs" data-app-key="sywdcc8r3up0em7"></script>
+        <script src="bower_components/bootstrap-javascript/bootstrap.js"></script>
+        <script src="scripts/main.js"></script>
+
         <script>
-            var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+            var _gaq=[['_setAccount','UA-10451416-4'],['_trackPageview']];
             (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
             g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
             s.parentNode.insertBefore(g,s)}(document,'script'));
