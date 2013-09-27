@@ -5596,7 +5596,7 @@ a.badge:hover {
   font-size: 18px;
   font-weight: 200;
   line-height: 30px;
-  color: inherit;
+  /*color: inherit;*/
 }
 
 .pull-right {
