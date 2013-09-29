@@ -86,7 +86,7 @@ $(document).ready(function(){
 				}) ;
 
 
-				$('.pdfs iframe').css({ opacity: 100 / numOfFiles + '%' }) ;
+				$('.pdfs iframe').css({ opacity: 1 / numOfFiles }) ;
 
 				$('.status').tooltip({
 					html: true,
