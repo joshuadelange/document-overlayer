@@ -5,6 +5,9 @@ $(document).ready(function(){
 	var cachingEnabled = false,
 			keepCheckingForCaching = true,
 			cacheAddress = 'http://localhost:1337/',
+			currentDocuments = [],
+			currentPage = 2,
+			waitingForPages = 0,
 			checkForCachingServer = function(){
 
 		console.log('checing for caching server...') ;
@@ -58,14 +61,7 @@ $(document).ready(function(){
 
 					if(cachingEnabled){
 
-						// $('.pdfs').append($('<iframe />').attr('src', googleDocsViewer)) ;
-
-						var $docWrapper = $('<div />').addClass('documentWrapper'),
-								$page1 = $('<img />').attr('src', cacheAddress + encodeURIComponent(googleDocsViewer) + '/1') ;
-
-						$docWrapper.append($page1) ;
-
-						$('.pdfs').append($docWrapper) ;
+						currentDocuments.push(googleDocsViewer) ;
 
 					}
 					else{
@@ -85,6 +81,14 @@ $(document).ready(function(){
 
 				}) ;
 
+				if(cachingEnabled) {
+	
+					var $pageWrapper = $('<div />').addClass('page') ;
+					$('.pdfs').append($pageWrapper) ;
+	
+					loadPage(currentPage) ;
+	
+				}
 
 				$('.pdfs iframe').css({ opacity: 1 / numOfFiles }) ;
 
@@ -97,7 +101,66 @@ $(document).ready(function(){
 			},
 			multiselect: true
 		});
-
 	}) ;
+
+	window.loadPage = function(pageNumber) {
+
+		waitingForPages = 0 ;
+
+		console.log('loading page with ', currentDocuments) ;
+
+		$('.page').html('') ;
+
+		$.each(currentDocuments, function(){
+
+			console.log('loading page ' + pageNumber + ' for ' + this) ;
+
+			var pageLocation = cacheAddress + encodeURIComponent(this) + '/' + pageNumber,
+					$page = $('<img />').attr('src', pageLocation) ;
+
+			$('.page').append($page) ;
+
+			waitingForPages++ ;
+
+			$('.status').html('Waiting for ' + waitingForPages + ' pages to load.') ;
+
+			$('.page img[src="' + pageLocation + '"]').load(function(){
+
+				// console.log('loaded!', this) ;
+
+				waitingForPages--;
+
+				if(waitingForPages === 0){
+					$('.status').html('All pages loaded') ;
+
+					console.log('loading pages around this one') ;
+
+					$.each(currentDocuments, function(){
+
+						//pinging the next page so it will start caching
+						$.ajax({
+							url: cacheAddress + encodeURIComponent(this) + '/' + parseInt(pageNumber + 1, 10)
+						}) ;
+
+						//pinging the previous page so it will start caching
+						$.ajax({
+							url: cacheAddress + encodeURIComponent(this) + '/' + parseInt(pageNumber - 1, 10)
+						}) ;
+
+					}) ;
+
+				}
+				else{
+					$('.status').html('Waiting for ' + waitingForPages + ' pages to load') ;
+				}
+
+
+			}) ;
+
+		}) ;
+
+		$('.page img').css('opacity', 1 / currentDocuments.length) ;
+
+	} ;
 
 }) ;
