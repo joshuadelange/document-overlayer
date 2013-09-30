@@ -8,6 +8,7 @@ $(document).ready(function(){
 			currentDocuments = [],
 			currentPage = 1,
 			waitingForPages = 0,
+			requests = [],
 			checkForCachingServer = function(){
 
 		console.log('checing for caching server...') ;
@@ -46,6 +47,8 @@ $(document).ready(function(){
 
 		Dropbox.choose({
 			success: function(files) {
+
+				currentPage = 1 ;
 
 				currentDocuments = [] ;
 
@@ -109,6 +112,8 @@ $(document).ready(function(){
 
 	var loadPage = function(pageNumber) {
 
+		stopAllRequests() ;
+
 		waitingForPages = 0 ;
 
 		console.log('loading page with ', currentDocuments) ;
@@ -142,14 +147,14 @@ $(document).ready(function(){
 					$.each(currentDocuments, function(){
 
 						//pinging the next page so it will start caching
-						$.ajax({
+						requests.push($.ajax({
 							url: cacheAddress + encodeURIComponent(this) + '/' + parseInt(pageNumber + 1, 10)
-						}) ;
+						})) ;
 
 						//pinging the previous page so it will start caching
-						$.ajax({
+						requests.push($.ajax({
 							url: cacheAddress + encodeURIComponent(this) + '/' + parseInt(pageNumber - 1, 10)
-						}) ;
+						})) ;
 
 					}) ;
 
@@ -176,5 +181,12 @@ $(document).ready(function(){
 		currentPage-- ;
 		loadPage(currentPage) ;
 	}) ;
+
+	var stopAllRequests = function(){
+		$.each(requests, function(){
+			this.abort() ;
+		}) ;
+	} ;
+
 
 }) ;
