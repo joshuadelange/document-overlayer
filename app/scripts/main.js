@@ -47,6 +47,8 @@ $(document).ready(function(){
 		Dropbox.choose({
 			success: function(files) {
 
+				currentDocuments = [] ;
+
 				$('.pdfs').html('') ;
 
 				$.each(files, function(){
@@ -122,7 +124,7 @@ $(document).ready(function(){
 
 			waitingForPages++ ;
 
-			$('.status').html('Waiting for ' + waitingForPages + ' pages to load.') ;
+			$('.status').html('Waiting for ' + waitingForPages + ' documents to load.') ;
 
 			$('.page img[src="' + pageLocation + '"]').load(function(){
 
@@ -131,9 +133,9 @@ $(document).ready(function(){
 				waitingForPages--;
 
 				if(waitingForPages === 0){
-					$('.status').html('All pages loaded') ;
+					$('.status').html('All documents loaded') ;
 
-					console.log('loading pages around this one') ;
+					console.log('loading documents around this one') ;
 
 					$.each(currentDocuments, function(){
 
@@ -151,7 +153,7 @@ $(document).ready(function(){
 
 				}
 				else{
-					$('.status').html('Waiting for ' + waitingForPages + ' pages to load') ;
+					$('.status').html('Waiting for ' + waitingForPages + ' documents to load') ;
 				}
 
 
