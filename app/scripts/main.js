@@ -84,7 +84,9 @@ $(document).ready(function(){
 				}) ;
 
 				if(cachingEnabled) {
-	
+
+					$('.pagination').fadeIn() ;
+
 					var $pageWrapper = $('<div />').addClass('page') ;
 					$('.pdfs').append($pageWrapper) ;
 	
@@ -105,7 +107,7 @@ $(document).ready(function(){
 		});
 	}) ;
 
-	window.loadPage = function(pageNumber) {
+	var loadPage = function(pageNumber) {
 
 		waitingForPages = 0 ;
 
@@ -164,5 +166,15 @@ $(document).ready(function(){
 		$('.page img').css('opacity', 1 / currentDocuments.length) ;
 
 	} ;
+
+	$('.nextPage').click(function(){
+		currentPage++ ;
+		loadPage(currentPage) ;
+	}) ;
+
+	$('.previousPage').click(function(){
+		currentPage-- ;
+		loadPage(currentPage) ;
+	}) ;
 
 }) ;

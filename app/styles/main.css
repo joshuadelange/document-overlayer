@@ -13,6 +13,21 @@
 	display: none;
 }
 
+.pagination {
+	display: none;
+	position: fixed;
+	height: auto;
+	z-index: 10000;
+}
+
+.previousPage {
+	left: 20px;
+}
+
+.nextPage {
+	right: 20px;
+}
+
 .container {
 	margin-top: 25px;
 }
@@ -41,4 +56,5 @@
 .page img {
 	position: absolute;
 	width: 100%;
+	z-index: 0;
 }
