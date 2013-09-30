@@ -54,6 +54,8 @@ $(document).ready(function(){
 
 				$('.pdfs').html('') ;
 
+				console.log(this, arguments) ;
+
 				$.each(files, function(){
 
 					numOfFiles++;
@@ -74,6 +76,7 @@ $(document).ready(function(){
 						$('.pdfs').append($('<iframe />').attr('src', googleDocsViewer)) ;
 
 					}
+
 
 					if(numOfFiles === 1) {
 						fileNames = this.name ;
@@ -97,7 +100,7 @@ $(document).ready(function(){
 	
 				}
 
-				$('.pdfs iframe').css({ opacity: 1 / numOfFiles }) ;
+				$('.pdfs iframe, .pdfs img').css({ opacity: 1 / numOfFiles }) ;
 
 				$('.status').tooltip({
 					html: true,
