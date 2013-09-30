@@ -6,7 +6,7 @@ $(document).ready(function(){
 			keepCheckingForCaching = true,
 			cacheAddress = 'http://localhost:1337/',
 			currentDocuments = [],
-			currentPage = 2,
+			currentPage = 1,
 			waitingForPages = 0,
 			checkForCachingServer = function(){
 
