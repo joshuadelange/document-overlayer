@@ -38,80 +38,96 @@ $(document).ready(function(){
 
 	checkForCachingServer() ;
 
+	var cachedFiles = [];
+
 	$('.openDropbox').click(function(){
 
 		keepCheckingForCaching = false ;
 
+		Dropbox.choose({
+			success: loadFiles,
+			multiselect: true
+		});
+
+	}) ;
+
+	var loadFiles = function(files) {
+
+		// if we're refreshing
+		if(!files) files = cachedFiles;
+
+		// seting for next time
+		cachedFiles = files;
+
+		currentPage = 1 ;
+
+		currentDocuments = [] ;
+
+		$('.pdfs').html('') ;
+
+		console.log(this, arguments) ;
+
 		var numOfFiles = 0,
 			fileNames = '' ;
 
-		Dropbox.choose({
-			success: function(files) {
+		$.each(files, function(){
 
-				currentPage = 1 ;
+			numOfFiles++;
 
-				currentDocuments = [] ;
+			var uniqueParts = this.link.replace('https://www.dropbox.com', ''),
+				pdfUrl = 'https://dl.dropboxusercontent.com' + uniqueParts + '?token_hash=AAE5nMnBD0EXGKzQIDq9hn5IcY8BApGhlxFqhml882aXKg&dl=1',
+				googleDocsViewer = 'https://docs.google.com/viewer?url=' + encodeURIComponent(pdfUrl) + '&embedded=true' ;
 
-				$('.pdfs').html('') ;
+			console.log('gdoc url', googleDocsViewer) ;
 
-				console.log(this, arguments) ;
+			if(cachingEnabled){
 
-				$.each(files, function(){
+				currentDocuments.push(googleDocsViewer) ;
 
-					numOfFiles++;
+			}
+			else{
 
-					var uniqueParts = this.link.replace('https://www.dropbox.com', ''),
-						pdfUrl = 'https://dl.dropboxusercontent.com' + uniqueParts + '?token_hash=AAE5nMnBD0EXGKzQIDq9hn5IcY8BApGhlxFqhml882aXKg&dl=1',
-						googleDocsViewer = 'https://docs.google.com/viewer?url=' + encodeURIComponent(pdfUrl) + '&embedded=true' ;
+				$('.pdfs').append($('<iframe />').attr('src', googleDocsViewer)) ;
 
-					console.log('gdoc url', googleDocsViewer) ;
-
-					if(cachingEnabled){
-
-						currentDocuments.push(googleDocsViewer) ;
-
-					}
-					else{
-
-						$('.pdfs').append($('<iframe />').attr('src', googleDocsViewer)) ;
-
-					}
+			}
 
 
-					if(numOfFiles === 1) {
-						fileNames = this.name ;
-					}
-					else {
-						fileNames = fileNames + '<br>' + this.name ;
-					}
+			if(numOfFiles === 1) {
+				fileNames = this.name ;
+			}
+			else {
+				fileNames = fileNames + '<br>' + this.name ;
+			}
 
-					$('.status').html('Showing ' + numOfFiles + ' files') ;
+			$('.status').html('Showing ' + numOfFiles + ' files') ;
 
-				}) ;
+		}) ;
 
-				if(cachingEnabled) {
+		if(cachingEnabled) {
 
-					$('.pagination').fadeIn() ;
+			$('.pagination').fadeIn() ;
 
-					var $pageWrapper = $('<div />').addClass('page') ;
-					$('.pdfs').append($pageWrapper) ;
-	
-					loadPage(currentPage) ;
-	
-				}
+			var $pageWrapper = $('<div />').addClass('page') ;
+			$('.pdfs').append($pageWrapper) ;
 
-				$('.pdfs iframe, .pdfs img').css({ opacity: 1 / numOfFiles }) ;
+			loadPage(currentPage) ;
 
-				$('.status').tooltip({
-					html: true,
-					title: fileNames,
-					placement: 'bottom'
-				}) ;
+		}
 
-			},
-			multiselect: true
-		});
-	}) ;
+		$('.pdfs iframe, .pdfs img').css({ opacity: 1 / numOfFiles }) ;
+
+		$('.status').tooltip({
+			html: true,
+			title: fileNames,
+			placement: 'bottom'
+		}) ;
+
+	};
+
+	$('.refresh').click(function(){
+		loadFiles();
+		console.log('refresh!');
+	});
 
 	var loadPage = function(pageNumber) {
 
@@ -190,6 +206,5 @@ $(document).ready(function(){
 			this.abort() ;
 		}) ;
 	} ;
-
 
 }) ;
